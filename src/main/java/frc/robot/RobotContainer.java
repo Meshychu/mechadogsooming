@@ -50,6 +50,8 @@ double tx = table.getEntry("tx").getDouble(0.0);
   SmartDashboard.putNumber("Limelight Y", ty);
   SmartDashboard.putNumber("Limelight Area", ta);
   SmartDashboard.putNumber("Limelight Detection", tv);
+  SmartDashboard.putNumber("LeftY", controller.getLeftY());
+  SmartDashboard.putNumber("RightY", controller.getRightY());
   
   
   shooter.runShooter(controller.getR2Axis());
@@ -75,13 +77,7 @@ double tx = table.getEntry("tx").getDouble(0.0);
 
   pcIntake = tCircleIntake;
 
-  if (cintake == true) {
-    shooter.runIntake(1.0);
-  } else if (cintake == false) {
-    shooter.runIntake(0.0);
-  }
-
-boolean tCrossIntake = controller.getCrossButton();
+  boolean tCrossIntake = controller.getCrossButton();
 
   if (tCrossIntake && !pcrIntake) {
     crintake = !crintake;
@@ -89,11 +85,27 @@ boolean tCrossIntake = controller.getCrossButton();
 
   pcrIntake = tCrossIntake;
 
-  if (crintake == true) {
-    shooter.runIntake(-1.0);
-  } else if (crintake == false) {
+  if (cintake == true) {
+    shooter.runIntake(1);
+  } else if (cintake == false) {
     shooter.runIntake(0.0);
-  }
+  } 
+
+  if (crintake == true) {
+    shooter.runIntake(-1);
+  } 
+
+if (controller.getTriangleButton()) {
+  shooter.extendActuators();
+} else if (controller.getSquareButton()) {
+  shooter.retractActuators();
+} 
+
+if (controller.getShareButton()) {
+  shooter.extendActuators2();
+} else if (controller.getOptionsButton()) {
+  shooter.retractActuators2();
+}
 
 
   // Put autochoosers and smartdashboard into constructor, not into here

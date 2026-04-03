@@ -30,8 +30,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   private final DifferentialDrive drive = new DifferentialDrive(leftLead, rightLead);
 
-  private final SlewRateLimiter leftLimiter = new SlewRateLimiter(3.0);
-  private final SlewRateLimiter rightLimiter = new SlewRateLimiter(3.0);
+  private final SlewRateLimiter leftLimiter = new SlewRateLimiter(10.0);
+  private final SlewRateLimiter rightLimiter = new SlewRateLimiter(10.0);
 
   // private final RelativeEncoder leftEncoder = leftLead.getEncoder();
   // private final RelativeEncoder rightEncoder = rightLead.getEncoder();
@@ -79,8 +79,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void tankDrive(double left, double right) {
 
-    left = MathUtil.applyDeadband(left, Constants.DriveConstants.FWD_DEADBAND);
-    right = MathUtil.applyDeadband(right, Constants.DriveConstants.FWD_DEADBAND);
+    left = MathUtil.applyDeadband(left, 0.05);
+    right = MathUtil.applyDeadband(right, 0.05);
 
     left = leftLimiter.calculate(left);
     right = rightLimiter.calculate(right);
