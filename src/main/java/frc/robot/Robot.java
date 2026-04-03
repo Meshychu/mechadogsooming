@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 // import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.cameraserver.CameraServer;
 
+
 public class Robot extends TimedRobot {
 
   // private Timer autoTimer = new Timer();
@@ -20,6 +21,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+autonomousCommand = robotContainer.getAutonomousCommand();
+
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
@@ -32,7 +35,12 @@ public class Robot extends TimedRobot {
 
    
 
-  private Command autonomousCommand;
+  private Command autonomousCommand; {
+ 
+  if (autonomousCommand != null) {
+  autonomousCommand.cancel();
+}
+}
 
   // @Override
   // public void autonomousInit() {

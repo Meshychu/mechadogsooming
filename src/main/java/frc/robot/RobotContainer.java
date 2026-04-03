@@ -12,10 +12,24 @@ import edu.wpi.first.wpilibj.PS4Controller;
 
 public class RobotContainer {
 
+  public RobotContainer() {
+     autoChooser.setDefaultOption("Drive and Shoot", new Autos(drive, shooter));
+  autoChooser.addOption("Do Nothing", null);
+
+  SmartDashboard.putData("Auto Modes", autoChooser);
+  }
+
+  public Command getAutonomousCommand() {
+  return autoChooser.getSelected();
+}
+
   private final SendableChooser<Command> autoChooser = new SendableChooser<>();
   private final DriveSubsystem drive = new DriveSubsystem();
   private final ShooterSubsystem shooter = new ShooterSubsystem();
   NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+
+
+
 
   public DriveSubsystem getDrive() {
     return drive;
@@ -107,14 +121,5 @@ if (controller.getShareButton()) {
   shooter.retractActuators2();
 }
 
-
-  // Put autochoosers and smartdashboard into constructor, not into here
-   autoChooser.setDefaultOption("Drive and Shoot", new Autos(drive, shooter));
-  autoChooser.addOption("Do Nothing", null);
-  SmartDashboard.putData("Auto Modes", autoChooser);
-  
-
-
-    // shooter.runPositionMotor(controller.getR1Button());
   }
 }
