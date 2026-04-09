@@ -18,11 +18,6 @@ public final class Constants {
     public static final int INTAKE_MOTOR = 7;
   }
 
-  public static final class ActuatorConstants {
-    public static final int PWM_PORT = 0;
-    public static final double RUN_TIME = 5.0;
-  }
-
   public static final class ControllerConstants {
     public static final int DRIVER_PORT = 1;
   }

@@ -11,6 +11,7 @@ import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.ResetMode;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.PersistMode;
 
 import edu.wpi.first.math.MathUtil;
@@ -18,7 +19,7 @@ import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 // import edu.wpi.first.wpilibj.Timer;
 // import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 
-public class ShooterSubsystem {
+public class ShooterSubsystem extends SubsystemBase{
 
   private final SparkMax shooterMotor =
       new SparkMax(Constants.ShooterConstants.SHOOTER_MOTOR, MotorType.kBrushless);
@@ -70,16 +71,26 @@ public class ShooterSubsystem {
       intakeMotor.configure(intakeCfg, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
-  public void runShooter(double trigger) {
+public void runShooterCombined(double forward, double reverse) {
+  if (forward < 0.05) forward = 0;
+  if (reverse < 0.05) reverse = 0;
 
-    double output = 0;
+  double output = forward - reverse;
+  output = MathUtil.clamp(output, -1.0, 1.0);
 
-    if (trigger >= 0.05) {
-      output = Math.ceil(trigger * 10.0) / 10.0;
-      output = MathUtil.clamp(output, 0.5, 1.0);
-    }
+  shooterMotor.set(output);
+}
 
-    shooterMotor.set(output);
+public void setShooterSpeed(double speed) {
+  shooterMotor.set(speed);
+}
+
+  public void runShooterButton() {
+    shooterMotor.set(0.60);
+  }
+
+  public void revShooterButton() {
+    shooterMotor.set(-0.70);
   }
 
   public void runClimber(double speed) {
@@ -97,11 +108,11 @@ private final PWMSparkMax actuator2 = new PWMSparkMax(0);
 
 // Extend both
 public void extendActuators() {
-  actuator1.set(1.0);
+  actuator1.set(0.6);
 }
 
 public void extendActuators2() {
-  actuator2.set(1.0);
+  actuator2.set(0.6);
 }
 
 // Retract both

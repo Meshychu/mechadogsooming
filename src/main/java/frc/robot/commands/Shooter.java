@@ -14,7 +14,7 @@ public class Shooter extends Command {
 public Shooter(ShooterSubsystem shoot) {
   this.shooterMotor = shoot;
   // this.distance = distance;
-//   addRequirements(shoot);
+  addRequirements(shoot);
 }
 
 @Override
@@ -26,12 +26,12 @@ public void initialize() {
 
 @Override
 public void execute() {
-  shooterMotor.runShooter(0.5);
+  shooterMotor.setShooterSpeed(0.7);
 }
 
 @Override
 public void end(boolean interrupted) {
-  shooterMotor.runShooter(0.0);
+  shooterMotor.setShooterSpeed(0.0);
 }
 
 @Override

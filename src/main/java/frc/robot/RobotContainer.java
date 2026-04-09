@@ -4,9 +4,11 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.Autos;
 import edu.wpi.first.wpilibj.PS4Controller;
 
@@ -14,7 +16,7 @@ public class RobotContainer {
 
   public RobotContainer() {
      autoChooser.setDefaultOption("Drive and Shoot", new Autos(drive, shooter));
-  autoChooser.addOption("Do Nothing", null);
+  autoChooser.addOption("Do Nothing", new InstantCommand());
 
   SmartDashboard.putData("Auto Modes", autoChooser);
   }
@@ -67,12 +69,22 @@ double tx = table.getEntry("tx").getDouble(0.0);
   SmartDashboard.putNumber("LeftY", controller.getLeftY());
   SmartDashboard.putNumber("RightY", controller.getRightY());
   
-  
-  shooter.runShooter(controller.getR2Axis());
+shooter.runShooterCombined(
+  controller.getR2Axis(),
+  controller.getL2Axis()
+);
 
+  //   if (controller.getR2Button()){
+  //   shooter.runShooter(controller.getR2Axis());
+  // } else if (controller.getL2Button()) {
+  //   shooter.runShooterRev(controller.getL2Axis());
+  //   }
+
+
+  double speedMultiplier = controller.getTriangleButton() ? 0.2 : 1.0;
   drive.tankDrive(
-    controller.getLeftY(),
-    controller.getRightY()
+    controller.getLeftY() * speedMultiplier,
+    controller.getRightY() * speedMultiplier
   );
 
   if (controller.getL1Button()) {
@@ -109,11 +121,6 @@ double tx = table.getEntry("tx").getDouble(0.0);
     shooter.runIntake(-1);
   } 
 
-if (controller.getTriangleButton()) {
-  shooter.extendActuators();
-} else if (controller.getSquareButton()) {
-  shooter.retractActuators();
-} 
 
 if (controller.getShareButton()) {
   shooter.extendActuators2();

@@ -92,4 +92,14 @@ public class DriveSubsystem extends SubsystemBase {
     drive.stopMotor();
   }
 
+  public void climbDrive(double left, double right) {
+        left = MathUtil.applyDeadband(left, 0.05);
+    right = MathUtil.applyDeadband(right, 0.05);
+
+    left = leftLimiter.calculate(left);
+    right = rightLimiter.calculate(right);
+
+    drive.tankDrive(left, right);
+  }
+
 }
